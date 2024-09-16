@@ -5,7 +5,7 @@ import numpy as np
 
 def plot(function):
     x = np.linspace(-10, 10, 40)
-    for i in func:
+    for i in function:
         if "sin" in function:
             plt.plot (x, np.sin(x), "blue", label = "sin(x)")
         if "cos" in function:
@@ -21,3 +21,4 @@ def plot(function):
     
 function = input('--function = ')
 plot(function)
+
