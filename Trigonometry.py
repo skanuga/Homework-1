@@ -94,36 +94,82 @@ def table(function, path):
             df['sin(x)'] = np.sin(x)
             df['cos(x)'] = np.cos(x)
             # enter data points for each of the requested functions into the data frame
+        return df    
+    
+def textfile(df, txtfile):
     string = df.to_string(header=True, index=True)
     f = open(path, 'w') #open and write into the txt file
     f.write(string)
     f.close()
+    #print('Writing table into TXT')
     
-# def readfromfile(readfile):
-#     ##stopped here
+fig = plt.figure()
+def readfromfile(function,path):
+    headerlist = df.columns.astype(str)
+    headers = ' '.join(headerlist)
+    x = df.index.tolist()
+    for i in headers:
+        if "sin" in headers and "sinc" not in headers: #sin alone
+            y_sin = df["sin(x)"].tolist()
+            plt.plot(x, y_sin, "royalblue", label = "sin(x)")   
+        if "cos" in headers: #cos alone
+            y_cos = df["cos(x)"].tolist()
+            plt.plot(x, y_cos, "cyan", label = "cos(x)")
+        if "sinc" in headers and len(headerlist)==1: #sinc alone
+            y_sinc = df["sinc(x)"].tolist()
+            plt.plot(x, y_sinc, "coral", label = "sinc(x)")    
+        if "sinc" in headers and "cos" in headers and len(headerlist) == 2: #cos,sinc
+            y_sinc = df["sinc(x)"].tolist()
+            plt.plot(x, y_sinc, "coral", label = "sinc(x)")  
+        if "sinc" in headers and "cos" not in headers and len(headerlist) == 2: #sin,sinc
+            y_sinc = df["sinc(x)"].tolist()
+            y_sin = df["sin(x)"].tolist()
+            plt.plot(x, y_sin, "royalblue", label = "sin(x)") 
+            plt.plot(x, y_sinc, "coral", label = "sinc(x)")  
+        if len(headerlist) == 3: #sin,sinc,cos
+            y_sin = df["sin(x)"].tolist()
+            y_sinc = df["sinc(x)"].tolist()
+            plt.plot(x, y_sinc, "coral", label = "sinc(x)")                          
+            plt.plot(x, y_sin, "royalblue", label = "sin(x)") 
+            
+        plt.xlabel('x')
+        plt.ylabel(f"{function}")
+        plt.title('Tigonometry Graph From TXT File')
+        plt.legend(loc = "upper left")
+        plt.show()
+        return
     
-#     return
-
-
-
-def print(img, filename):
+             
+def prnt(img):
     
     if 'jpeg' in img:
-        plt.savefig(path, format='jpg')
+        path = rf"/Users/skanuga/Desktop/{filename}.jpeg"
+        fig.savefig(path, format='jpeg')
     if 'eps' in img:
-        plt.savefig(path, format='eps')
+        path = rf"/Users/skanuga/Desktop/{filename}.jpeg"
+        fig.savefig(path, format='eps')
     if 'pdf' in img:
-        plt.savefig(path, format='pdf')
+        path = rf"/Users/skanuga/Desktop/{filename}.jpeg"
+        fig.savefig(path, format='pdf')
+    print('exporting...')
+        
     ##UNTESTED
     
     
 
-#readfile = input('--read from file = ')
+function = input('--function = ')
+plot(function)
+
+plot = plot(function)
+
 filename = input ('--write = ')
 path = rf"/Users/skanuga/Desktop/{filename}"
-function = input('--function = ')
-plot = plot(function)
+table(function, path)
+df=table(function, path)
+textfile(df,path)
+readfile = input('--read from file = ')
+readfromfile(function, path)
+df = table(function,path)
 img = input('--print = ')
-plot(function)
-table = table(function, path)
-print(table)
+prnt(img)
+
